@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="inventarioModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="cliente">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="100" />
+    <Property Name="documento" Type="varchar" MaxLength="50" />
+    <Property Name="email" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="compra">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fecha" Type="date" />
+    <Property Name="total" Type="int" />
+    <Property Name="id_usuario" Type="int" />
+    <Property Name="id_cliente" Type="int" />
+  </EntityType>
+  <EntityType Name="producto">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="50" />
+    <Property Name="percio_unitario" Type="int" />
+    <Property Name="descripcion" Type="longtext" />
+    <Property Name="cantidad" Type="int" />
+    <Property Name="id_proveedor" Type="int" />
+  </EntityType>
+  <EntityType Name="producto_compra">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="id_compra" Type="int" />
+    <Property Name="id_producto" Type="int" />
+    <Property Name="cantidad" Type="int" />
+  </EntityType>
+  <EntityType Name="proveedor">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="50" />
+    <Property Name="direccion" Type="varchar" MaxLength="100" />
+    <Property Name="telefono" Type="varchar" MaxLength="20" />
+    <Property Name="nombre_contacto" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="usuario">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="50" />
+    <Property Name="apellido" Type="varchar" MaxLength="50" />
+    <Property Name="fecha_nacimiento" Type="date" />
+    <Property Name="email" Type="varchar" MaxLength="100" />
+    <Property Name="password" Type="varchar" MaxLength="8" />
+  </EntityType>
+  <Association Name="compra_ibfk_1">
+    <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
+    <End Role="compra" Type="Self.compra" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuario">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="compra">
+        <PropertyRef Name="id_usuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="compra_ibfk_2">
+    <End Role="cliente" Type="Self.cliente" Multiplicity="0..1" />
+    <End Role="compra" Type="Self.compra" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="cliente">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="compra">
+        <PropertyRef Name="id_cliente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="producto_compra_ibfk_1">
+    <End Role="compra" Type="Self.compra" Multiplicity="0..1" />
+    <End Role="producto_compra" Type="Self.producto_compra" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="compra">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="producto_compra">
+        <PropertyRef Name="id_compra" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="producto_compra_ibfk_2">
+    <End Role="producto" Type="Self.producto" Multiplicity="0..1" />
+    <End Role="producto_compra" Type="Self.producto_compra" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="producto">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="producto_compra">
+        <PropertyRef Name="id_producto" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="producto_ibfk_1">
+    <End Role="proveedor" Type="Self.proveedor" Multiplicity="0..1" />
+    <End Role="producto" Type="Self.producto" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="proveedor">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="producto">
+        <PropertyRef Name="id_proveedor" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="inventarioModelStoreContainer">
+    <EntitySet Name="cliente" EntityType="Self.cliente" Schema="inventario" store:Type="Tables" />
+    <EntitySet Name="compra" EntityType="Self.compra" Schema="inventario" store:Type="Tables" />
+    <EntitySet Name="producto" EntityType="Self.producto" Schema="inventario" store:Type="Tables" />
+    <EntitySet Name="producto_compra" EntityType="Self.producto_compra" Schema="inventario" store:Type="Tables" />
+    <EntitySet Name="proveedor" EntityType="Self.proveedor" Schema="inventario" store:Type="Tables" />
+    <EntitySet Name="usuario" EntityType="Self.usuario" Schema="inventario" store:Type="Tables" />
+    <AssociationSet Name="compra_ibfk_1" Association="Self.compra_ibfk_1">
+      <End Role="usuario" EntitySet="usuario" />
+      <End Role="compra" EntitySet="compra" />
+    </AssociationSet>
+    <AssociationSet Name="compra_ibfk_2" Association="Self.compra_ibfk_2">
+      <End Role="cliente" EntitySet="cliente" />
+      <End Role="compra" EntitySet="compra" />
+    </AssociationSet>
+    <AssociationSet Name="producto_compra_ibfk_1" Association="Self.producto_compra_ibfk_1">
+      <End Role="compra" EntitySet="compra" />
+      <End Role="producto_compra" EntitySet="producto_compra" />
+    </AssociationSet>
+    <AssociationSet Name="producto_compra_ibfk_2" Association="Self.producto_compra_ibfk_2">
+      <End Role="producto" EntitySet="producto" />
+      <End Role="producto_compra" EntitySet="producto_compra" />
+    </AssociationSet>
+    <AssociationSet Name="producto_ibfk_1" Association="Self.producto_ibfk_1">
+      <End Role="proveedor" EntitySet="proveedor" />
+      <End Role="producto" EntitySet="producto" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

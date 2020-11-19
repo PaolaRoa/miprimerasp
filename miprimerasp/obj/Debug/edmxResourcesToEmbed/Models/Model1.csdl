@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="inventarioModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="cliente">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="documento" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="compra" Relationship="Self.compra_ibfk_2" FromRole="cliente" ToRole="compra" />
+  </EntityType>
+  <EntityType Name="compra">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fecha" Type="DateTime" />
+    <Property Name="total" Type="Int32" />
+    <Property Name="id_usuario" Type="Int32" />
+    <Property Name="id_cliente" Type="Int32" />
+    <NavigationProperty Name="cliente" Relationship="Self.compra_ibfk_2" FromRole="compra" ToRole="cliente" />
+    <NavigationProperty Name="usuario" Relationship="Self.compra_ibfk_1" FromRole="compra" ToRole="usuario" />
+    <NavigationProperty Name="producto_compra" Relationship="Self.producto_compra_ibfk_1" FromRole="compra" ToRole="producto_compra" />
+  </EntityType>
+  <EntityType Name="producto">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="percio_unitario" Type="Int32" />
+    <Property Name="descripcion" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
+    <Property Name="cantidad" Type="Int32" />
+    <Property Name="id_proveedor" Type="Int32" />
+    <NavigationProperty Name="producto_compra" Relationship="Self.producto_compra_ibfk_2" FromRole="producto" ToRole="producto_compra" />
+    <NavigationProperty Name="proveedor" Relationship="Self.producto_ibfk_1" FromRole="producto" ToRole="proveedor" />
+  </EntityType>
+  <EntityType Name="producto_compra">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id_compra" Type="Int32" />
+    <Property Name="id_producto" Type="Int32" />
+    <Property Name="cantidad" Type="Int32" />
+    <NavigationProperty Name="compra" Relationship="Self.producto_compra_ibfk_1" FromRole="producto_compra" ToRole="compra" />
+    <NavigationProperty Name="producto" Relationship="Self.producto_compra_ibfk_2" FromRole="producto_compra" ToRole="producto" />
+  </EntityType>
+  <EntityType Name="proveedor">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="direccion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="telefono" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="nombre_contacto" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="producto" Relationship="Self.producto_ibfk_1" FromRole="proveedor" ToRole="producto" />
+  </EntityType>
+  <EntityType Name="usuario">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="apellido" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="fecha_nacimiento" Type="DateTime" />
+    <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="password" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="compra" Relationship="Self.compra_ibfk_1" FromRole="usuario" ToRole="compra" />
+  </EntityType>
+  <Association Name="compra_ibfk_2">
+    <End Role="cliente" Type="Self.cliente" Multiplicity="0..1" />
+    <End Role="compra" Type="Self.compra" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="cliente">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="compra">
+        <PropertyRef Name="id_cliente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="compra_ibfk_1">
+    <End Role="usuario" Type="Self.usuario" Multiplicity="0..1" />
+    <End Role="compra" Type="Self.compra" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuario">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="compra">
+        <PropertyRef Name="id_usuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="producto_compra_ibfk_1">
+    <End Role="compra" Type="Self.compra" Multiplicity="0..1" />
+    <End Role="producto_compra" Type="Self.producto_compra" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="compra">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="producto_compra">
+        <PropertyRef Name="id_compra" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="producto_compra_ibfk_2">
+    <End Role="producto" Type="Self.producto" Multiplicity="0..1" />
+    <End Role="producto_compra" Type="Self.producto_compra" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="producto">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="producto_compra">
+        <PropertyRef Name="id_producto" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="producto_ibfk_1">
+    <End Role="proveedor" Type="Self.proveedor" Multiplicity="0..1" />
+    <End Role="producto" Type="Self.producto" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="proveedor">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="producto">
+        <PropertyRef Name="id_proveedor" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="inventarioEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="cliente" EntityType="Self.cliente" />
+    <EntitySet Name="compra" EntityType="Self.compra" />
+    <EntitySet Name="producto" EntityType="Self.producto" />
+    <EntitySet Name="producto_compra" EntityType="Self.producto_compra" />
+    <EntitySet Name="proveedor" EntityType="Self.proveedor" />
+    <EntitySet Name="usuario" EntityType="Self.usuario" />
+    <AssociationSet Name="compra_ibfk_2" Association="Self.compra_ibfk_2">
+      <End Role="cliente" EntitySet="cliente" />
+      <End Role="compra" EntitySet="compra" />
+    </AssociationSet>
+    <AssociationSet Name="compra_ibfk_1" Association="Self.compra_ibfk_1">
+      <End Role="usuario" EntitySet="usuario" />
+      <End Role="compra" EntitySet="compra" />
+    </AssociationSet>
+    <AssociationSet Name="producto_compra_ibfk_1" Association="Self.producto_compra_ibfk_1">
+      <End Role="compra" EntitySet="compra" />
+      <End Role="producto_compra" EntitySet="producto_compra" />
+    </AssociationSet>
+    <AssociationSet Name="producto_compra_ibfk_2" Association="Self.producto_compra_ibfk_2">
+      <End Role="producto" EntitySet="producto" />
+      <End Role="producto_compra" EntitySet="producto_compra" />
+    </AssociationSet>
+    <AssociationSet Name="producto_ibfk_1" Association="Self.producto_ibfk_1">
+      <End Role="proveedor" EntitySet="proveedor" />
+      <End Role="producto" EntitySet="producto" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

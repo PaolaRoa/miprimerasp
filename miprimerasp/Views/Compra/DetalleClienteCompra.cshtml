@@ -1,0 +1,34 @@
+﻿@model IEnumerable<miprimerasp.Models.ClienteCompra>
+
+@{
+    ViewBag.Title = "DetalleClienteCompra";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>DetalleClienteCompra</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Cliente</th>
+            <th>Usuario</th>
+            <th>Total</th>    
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.FechaCompra)</td>
+                    <td>@Html.DisplayFor(modelItem => item.NombreCliente)</td>
+                    <td>@Html.DisplayFor(modelItem => item.NombreUsuario)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TotalCompra)</td>        
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>
+
