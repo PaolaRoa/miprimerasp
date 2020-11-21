@@ -3,6 +3,12 @@
     ViewBag.Title = "uploadCSV";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@{
+    if (!string.IsNullOrEmpty(ViewBag.Message))
+    {
+        <div class=" alert alert-warning">@ViewBag.Message</div>
+    }
+}
 
 <h2>Cargue Masivo de datos</h2>
 

@@ -167,6 +167,7 @@ namespace miprimerasp.Controllers
 
         public ActionResult uploadCSV(String message = "")
         {
+            ViewBag.Message = message;
             return View();
         }
 
@@ -188,7 +189,7 @@ namespace miprimerasp.Controllers
                 if (extension != ".csv")
                 {
                     
-                    return View();
+                    return uploadCSV("Tipo de archivo incorrecto. Por favor seleccione un archivo .csv");
                 }
 
                 fileForm.SaveAs(filePath);
