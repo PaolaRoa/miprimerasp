@@ -1,6 +1,7 @@
 ﻿using miprimerasp.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -163,7 +164,64 @@ namespace miprimerasp.Controllers
 
 
         }
-            
+
+        public ActionResult uploadCSV(String message = "")
+        {
+            return View();
+        }
+
+        [HttpPost]
+
+        public ActionResult uploadCSV(HttpPostedFileBase fileForm)
+        {
+            string filePath = string.Empty;
+            if (fileForm != null)
+            {
+                string path = Server.MapPath("~/uploads/");
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                filePath = path + Path.GetFileName(fileForm.FileName);
+                string extension = Path.GetExtension(fileForm.FileName);
+
+                if (extension != ".csv")
+                {
+                    
+                    return View();
+                }
+
+                fileForm.SaveAs(filePath);
+
+                string csvData = System.IO.File.ReadAllText(filePath);
+                foreach(string row in csvData.Split('\n'))
+                {
+                    if (!string.IsNullOrEmpty(row))
+                    {
+                        var newProveedor = new proveedor()
+                        {
+                            nombre = row.Split(';')[0],
+                            nombre_contacto = row.Split(';')[1],
+                            direccion = row.Split(';')[2],
+                            telefono = row.Split(';')[3],
+
+                        };
+
+                        using (var db= new inventarioEntities())
+                        {
+                            db.proveedor.Add(newProveedor);
+                            db.SaveChanges();
+                        }
+
+                    }
+                    
+                }
+
+            }
+            return View();
+        }
+
+
         }
     }
 
