@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using miprimerasp.Models;
 using Org.BouncyCastle.Asn1.Misc;
+using Rotativa;
 
 namespace miprimerasp.Controllers
 {
@@ -195,8 +196,13 @@ namespace miprimerasp.Controllers
                 throw;
             }
 
-            
-
         }
+
+        public ActionResult imprimirReporte()
+        {
+            return new ActionAsPdf("DetalleClienteCompra") { FileName = "reporte.pdf" };
+        }
+
+        
     }
 }

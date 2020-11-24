@@ -1,34 +1,50 @@
 ﻿@model IEnumerable<miprimerasp.Models.ClienteCompra>
 
 @{
-    ViewBag.Title = "DetalleClienteCompra";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Layout = null;
 }
 
-<h2>DetalleClienteCompra</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Fecha</th>
-            <th>Cliente</th>
-            <th>Usuario</th>
-            <th>Total</th>    
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            foreach (var item in Model)
-            {
-                <tr>
-                    <td>@Html.DisplayFor(modelItem => item.FechaCompra)</td>
-                    <td>@Html.DisplayFor(modelItem => item.NombreCliente)</td>
-                    <td>@Html.DisplayFor(modelItem => item.NombreUsuario)</td>
-                    <td>@Html.DisplayFor(modelItem => item.TotalCompra)</td>        
-                </tr>
-            }
-        }
+<!DOCTYPE html>
 
-    </tbody>
-</table>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>reporteProductos</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div>
+        <div>
+            <div class="container">
+                <h2>Reporte de productos</h2>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Descripcion</th>
 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.FechaCompra)</td>
+                            <td>@Html.DisplayFor(modelItem => item.NombreCliente)</td>
+                            <td>@Html.DisplayFor(modelItem => item.NombreUsuario)</td>
+                            <td>@Html.DisplayFor(modelItem => item.TotalCompra)</td>
+                        </tr>
+
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+            @Scripts.Render("~/bundles/jquery")
+            @Scripts.Render("~/bundles/bootstrap")
+</body>
+</html>
