@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="inventarioModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="inventarioModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="cliente">
           <Key>
             <PropertyRef Name="id" />
@@ -43,6 +43,14 @@
           <Property Name="id_compra" Type="int" />
           <Property Name="id_producto" Type="int" />
           <Property Name="cantidad" Type="int" />
+        </EntityType>
+        <EntityType Name="producto_imagen">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="imagen" Type="varchar" MaxLength="200" />
+          <Property Name="id_producto" Type="int" />
         </EntityType>
         <EntityType Name="proveedor">
           <Key>
@@ -125,11 +133,24 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="producto_imagen_ibfk_1">
+          <End Role="producto" Type="Self.producto" Multiplicity="0..1" />
+          <End Role="producto_imagen" Type="Self.producto_imagen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="producto">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="producto_imagen">
+              <PropertyRef Name="id_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="inventarioModelStoreContainer">
           <EntitySet Name="cliente" EntityType="Self.cliente" Schema="inventario" store:Type="Tables" />
           <EntitySet Name="compra" EntityType="Self.compra" Schema="inventario" store:Type="Tables" />
           <EntitySet Name="producto" EntityType="Self.producto" Schema="inventario" store:Type="Tables" />
           <EntitySet Name="producto_compra" EntityType="Self.producto_compra" Schema="inventario" store:Type="Tables" />
+          <EntitySet Name="producto_imagen" EntityType="Self.producto_imagen" Schema="inventario" store:Type="Tables" />
           <EntitySet Name="proveedor" EntityType="Self.proveedor" Schema="inventario" store:Type="Tables" />
           <EntitySet Name="usuario" EntityType="Self.usuario" Schema="inventario" store:Type="Tables" />
           <AssociationSet Name="compra_ibfk_1" Association="Self.compra_ibfk_1">
@@ -152,9 +173,12 @@
             <End Role="proveedor" EntitySet="proveedor" />
             <End Role="producto" EntitySet="producto" />
           </AssociationSet>
+          <AssociationSet Name="producto_imagen_ibfk_1" Association="Self.producto_imagen_ibfk_1">
+            <End Role="producto" EntitySet="producto" />
+            <End Role="producto_imagen" EntitySet="producto_imagen" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="inventarioModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -193,6 +217,7 @@
           <Property Name="id_proveedor" Type="Int32" />
           <NavigationProperty Name="producto_compra" Relationship="Self.producto_compra_ibfk_2" FromRole="producto" ToRole="producto_compra" />
           <NavigationProperty Name="proveedor" Relationship="Self.producto_ibfk_1" FromRole="producto" ToRole="proveedor" />
+          <NavigationProperty Name="producto_imagen" Relationship="inventarioModel.producto_imagen_ibfk_1" FromRole="producto" ToRole="producto_imagen" />
         </EntityType>
         <EntityType Name="producto_compra">
           <Key>
@@ -315,7 +340,33 @@
             <End Role="proveedor" EntitySet="proveedor" />
             <End Role="producto" EntitySet="producto" />
           </AssociationSet>
+          <EntitySet Name="producto_imagen" EntityType="inventarioModel.producto_imagen" />
+          <AssociationSet Name="producto_imagen_ibfk_1" Association="inventarioModel.producto_imagen_ibfk_1">
+            <End Role="producto" EntitySet="producto" />
+            <End Role="producto_imagen" EntitySet="producto_imagen" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="producto_imagen">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="imagen" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="id_producto" Type="Int32" />
+          <NavigationProperty Name="producto" Relationship="inventarioModel.producto_imagen_ibfk_1" FromRole="producto_imagen" ToRole="producto" />
+        </EntityType>
+        <Association Name="producto_imagen_ibfk_1">
+          <End Type="inventarioModel.producto" Role="producto" Multiplicity="0..1" />
+          <End Type="inventarioModel.producto_imagen" Role="producto_imagen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="producto">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="producto_imagen">
+              <PropertyRef Name="id_producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -385,6 +436,15 @@
                 <ScalarProperty Name="fecha_nacimiento" ColumnName="fecha_nacimiento" />
                 <ScalarProperty Name="email" ColumnName="email" />
                 <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="producto_imagen">
+            <EntityTypeMapping TypeName="inventarioModel.producto_imagen">
+              <MappingFragment StoreEntitySet="producto_imagen">
+                <ScalarProperty Name="id_producto" ColumnName="id_producto" />
+                <ScalarProperty Name="imagen" ColumnName="imagen" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -179,6 +179,18 @@ namespace miprimerasp.Controllers
             return new ActionAsPdf("reporteProductos") { FileName= "reporte.pdf" };
         }
 
+        public ActionResult addImage(String message = "")
+        {
+            ViewBag.Message = message;
+            return View();
+        }
+
+        [HttpPost]
+
+        public ActionResult addImage(HttpPostedFileBase productImage)
+        {
+
+        }
     }
 
     

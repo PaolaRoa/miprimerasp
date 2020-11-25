@@ -16,6 +16,8 @@
         <AssociationConnector Association="inventarioModel.producto_compra_ibfk_1" ManuallyRouted="false" />
         <AssociationConnector Association="inventarioModel.producto_compra_ibfk_2" ManuallyRouted="false" />
         <AssociationConnector Association="inventarioModel.producto_ibfk_1" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="inventarioModel.producto_imagen" Width="1.5" PointX="5.25" PointY="9.5" />
+        <AssociationConnector Association="inventarioModel.producto_imagen_ibfk_1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
