@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "uploadClienteCSV";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    if (!string.IsNullOrEmpty(ViewBag.Message))
+    {
+        <div class=" alert alert-warning">@ViewBag.Message</div>
+    }
+}
+<h2>Carga de Clientes</h2>
+
+@using (Html.BeginForm("uploadClienteCSV", "Cliente", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <input type="file" name="fileForm" />
+    <input type="submit" value="Cargar Archivo" />
+}
+
+

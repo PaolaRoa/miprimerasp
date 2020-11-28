@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -148,6 +149,58 @@ namespace miprimerasp.Controllers
 
         }
 
+        public ActionResult uploadClienteCSV(string message = "")
+        {
+            ViewBag.message = message;
+            return View();
+        }
+
+        [HttpPost]
+
+        public ActionResult uploadClienteCSV(HttpPostedFileBase fileForm)
+        {
+            string filePath = string.Empty;
+            if(fileForm != null)
+            {
+                string path = Server.MapPath("~/uploads/");
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+
+                filePath = path + Path.GetFileName(fileForm.FileName);
+                string extension = Path.GetExtension(fileForm.FileName);
+
+                if (extension != ".csv")
+                {
+                    return uploadClienteCSV("Por favor suba solo archivos .csv");
+                }
+
+                fileForm.SaveAs(filePath);
+
+                string csvData = System.IO.File.ReadAllText(filePath);
+                foreach (string row in csvData.Split('\n'))
+                {
+                    if (!string.IsNullOrEmpty(row))
+                    {
+                        var newCliente = new cliente()
+                        {
+                            nombre =row.Split(';')[0],
+                            documento = row.Split(';')[1],
+                            email = row.Split(';')[2],
+
+                        };
+
+                        using (var db = new inventarioEntities())
+                        {
+                            db.cliente.Add(newCliente);
+                            db.SaveChanges();
+                        }
+                    }
+                }
+            }
+            return View();
+        }
 
     }
 }
