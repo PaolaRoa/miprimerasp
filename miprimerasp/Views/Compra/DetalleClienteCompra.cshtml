@@ -32,17 +32,19 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                        <tr>
-                            <td>@Html.DisplayFor(modelItem => item.FechaCompra)</td>
-                            <td>@Html.DisplayFor(modelItem => item.NombreCliente)</td>
-                            <td>@Html.DisplayFor(modelItem => item.NombreUsuario)</td>
-                            <td>@Html.DisplayFor(modelItem => item.TotalCompra)</td>
-                        </tr>
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.FechaCompra)</td>
+                                <td>@Html.DisplayFor(modelItem => item.NombreCliente)</td>
+                                <td>@Html.DisplayFor(modelItem => item.NombreUsuario)</td>
+                                <td>@Html.DisplayFor(modelItem => item.TotalCompra)</td>
+                            </tr>
 
                         }
                     </tbody>
 
                 </table>
+
+                <input type="button" value="Descargar PDF" onclick="location.href='@Url.Action("imprimirReporte", "Compra")'" />
             </div>
             @Scripts.Render("~/bundles/jquery")
             @Scripts.Render("~/bundles/bootstrap")
