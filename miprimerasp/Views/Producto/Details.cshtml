@@ -51,6 +51,21 @@
             @Html.DisplayFor(model => model.id_proveedor)
         </dd>
 
+        <dt>
+            Imagen
+        </dt>
+
+
+        <dd>
+
+            @{
+                if (!string.IsNullOrEmpty(ViewBag.imagen))
+                {
+                    <img src="@Url.Content("~/Uploads/"+ViewBag.imagen)" class="img-responsive" />
+                }
+            }
+        </dd>
+
     </dl>
 </div>
 <p>

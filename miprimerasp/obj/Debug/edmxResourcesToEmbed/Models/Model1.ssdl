@@ -39,6 +39,14 @@
     <Property Name="id_producto" Type="int" />
     <Property Name="cantidad" Type="int" />
   </EntityType>
+  <EntityType Name="producto_imagen">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="imagen" Type="varchar" MaxLength="200" />
+    <Property Name="id_producto" Type="int" />
+  </EntityType>
   <EntityType Name="proveedor">
     <Key>
       <PropertyRef Name="id" />
@@ -120,11 +128,24 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="producto_imagen_ibfk_1">
+    <End Role="producto" Type="Self.producto" Multiplicity="0..1" />
+    <End Role="producto_imagen" Type="Self.producto_imagen" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="producto">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="producto_imagen">
+        <PropertyRef Name="id_producto" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="inventarioModelStoreContainer">
     <EntitySet Name="cliente" EntityType="Self.cliente" Schema="inventario" store:Type="Tables" />
     <EntitySet Name="compra" EntityType="Self.compra" Schema="inventario" store:Type="Tables" />
     <EntitySet Name="producto" EntityType="Self.producto" Schema="inventario" store:Type="Tables" />
     <EntitySet Name="producto_compra" EntityType="Self.producto_compra" Schema="inventario" store:Type="Tables" />
+    <EntitySet Name="producto_imagen" EntityType="Self.producto_imagen" Schema="inventario" store:Type="Tables" />
     <EntitySet Name="proveedor" EntityType="Self.proveedor" Schema="inventario" store:Type="Tables" />
     <EntitySet Name="usuario" EntityType="Self.usuario" Schema="inventario" store:Type="Tables" />
     <AssociationSet Name="compra_ibfk_1" Association="Self.compra_ibfk_1">
@@ -146,6 +167,10 @@
     <AssociationSet Name="producto_ibfk_1" Association="Self.producto_ibfk_1">
       <End Role="proveedor" EntitySet="proveedor" />
       <End Role="producto" EntitySet="producto" />
+    </AssociationSet>
+    <AssociationSet Name="producto_imagen_ibfk_1" Association="Self.producto_imagen_ibfk_1">
+      <End Role="producto" EntitySet="producto" />
+      <End Role="producto_imagen" EntitySet="producto_imagen" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

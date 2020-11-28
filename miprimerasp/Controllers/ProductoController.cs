@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -109,10 +110,13 @@ namespace miprimerasp.Controllers
         {
             try
             {
-                using (var db= new inventarioEntities())
+                using (var db = new inventarioEntities())
                 {
-                   producto detailProducto=  db.producto.Find(id);
-                    return View(detailProducto);
+                    producto findProduct = db.producto.Where(a => a.id == id).FirstOrDefault();
+                    var imagen = db.producto_imagen.Where(a => a.id_producto == findProduct.id)
+                        .Select(a => a.imagen).ToArray();
+                    ViewBag.imagen = imagen[0];
+                    return View(findProduct);
 
                 }
             }
@@ -179,17 +183,67 @@ namespace miprimerasp.Controllers
             return new ActionAsPdf("reporteProductos") { FileName= "reporte.pdf" };
         }
 
-        public ActionResult addImage(String message = "")
+        public ActionResult CreateImage(String message = "")
         {
             ViewBag.Message = message;
             return View();
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
 
-        public ActionResult addImage(HttpPostedFileBase productImage)
+        public ActionResult CreateImage(producto newProduct, HttpPostedFileBase fileImage)
         {
+            
+            try
+            {
+                using (var db = new inventarioEntities())
+                {
+                    db.producto.Add(newProduct);
+                    db.SaveChanges();
+                    int idProduct = newProduct.id;
 
+                    string filePath = string.Empty;
+                    string nameFile = string.Empty;
+                    if (fileImage!= null)
+                    {
+                        string path = Server.MapPath("~/uploads/");
+                        if (!Directory.Exists(path))
+                        {
+                            Directory.CreateDirectory(path);
+                        }
+
+                        filePath = path + Path.GetFileName(fileImage.FileName);
+                        string extension = Path.GetExtension(fileImage.FileName);
+                        fileImage.SaveAs(filePath);
+                        nameFile = Path.GetFileName(fileImage.FileName);
+                        if (extension != ".jpg" && extension != ".png" && extension != ".jpeg" && extension != ".svg")
+                        {
+                            return CreateImage("Por favor suba una imagen en formato png o jpg");
+                        }
+
+                        var productImage = new producto_imagen
+                        {
+                            id_producto = idProduct,
+                            imagen = nameFile
+                        };
+
+                        db.producto_imagen.Add(productImage);
+                        db.SaveChanges();
+
+                        return RedirectToAction("Index");
+                    }
+                    return View();
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "error" + ex);
+                return View();
+                throw;
+            }
         }
     }
 

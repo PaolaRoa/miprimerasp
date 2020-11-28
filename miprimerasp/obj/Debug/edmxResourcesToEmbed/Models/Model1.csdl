@@ -35,6 +35,7 @@
     <Property Name="id_proveedor" Type="Int32" />
     <NavigationProperty Name="producto_compra" Relationship="Self.producto_compra_ibfk_2" FromRole="producto" ToRole="producto_compra" />
     <NavigationProperty Name="proveedor" Relationship="Self.producto_ibfk_1" FromRole="producto" ToRole="proveedor" />
+    <NavigationProperty Name="producto_imagen" Relationship="inventarioModel.producto_imagen_ibfk_1" FromRole="producto" ToRole="producto_imagen" />
   </EntityType>
   <EntityType Name="producto_compra">
     <Key>
@@ -157,5 +158,31 @@
       <End Role="proveedor" EntitySet="proveedor" />
       <End Role="producto" EntitySet="producto" />
     </AssociationSet>
+    <EntitySet Name="producto_imagen" EntityType="inventarioModel.producto_imagen" />
+    <AssociationSet Name="producto_imagen_ibfk_1" Association="inventarioModel.producto_imagen_ibfk_1">
+      <End Role="producto" EntitySet="producto" />
+      <End Role="producto_imagen" EntitySet="producto_imagen" />
+    </AssociationSet>
   </EntityContainer>
+  <EntityType Name="producto_imagen">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="imagen" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="id_producto" Type="Int32" />
+    <NavigationProperty Name="producto" Relationship="inventarioModel.producto_imagen_ibfk_1" FromRole="producto_imagen" ToRole="producto" />
+  </EntityType>
+  <Association Name="producto_imagen_ibfk_1">
+    <End Type="inventarioModel.producto" Role="producto" Multiplicity="0..1" />
+    <End Type="inventarioModel.producto_imagen" Role="producto_imagen" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="producto">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="producto_imagen">
+        <PropertyRef Name="id_producto" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>
