@@ -19,11 +19,10 @@
             @Html.DisplayNameFor(model => model.total)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.id_usuario)
+            Usuario
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.id_cliente)
-        </th>
+           Cliente
         <th></th>
     </tr>
 
@@ -36,10 +35,10 @@
             @Html.DisplayFor(modelItem => item.total)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.id_usuario)
+            @miprimerasp.Controllers.CompraController.NombreUsuario(item.id_usuario)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.id_cliente)
+            @miprimerasp.Controllers.CompraController.NombreCliente(item.id_cliente)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.id }) |

@@ -25,7 +25,7 @@
             @Html.DisplayNameFor(model => model.cantidad)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.id_proveedor)
+            Proveedor
         </th>
         <th></th>
     </tr>
@@ -46,7 +46,7 @@
                 @Html.DisplayFor(modelItem => item.cantidad)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.id_proveedor)
+                @miprimerasp.Controllers.ProductoController.NombreProveedor(item.id_proveedor)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
